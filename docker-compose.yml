@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ./spring/postgresteste/
+    environment:
+      PROFILE: production
+      DB_DRIVER: org.postgresql.Driver
+      DATASOURCE: jdbc:postgresql://db:5432/todo
+      JPA_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      DB_USERNAME: postgres
+      DB_PASSWORD: example
+    ports:
+      - 8080:8080
+    networks:
+      - minha-rede
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: todo
+    ports:
+      - 8081:5432
+    networks:
+      - minha-rede
+    
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8082:8080
+    networks:
+      - minha-rede
+
+networks:
+  minha-rede:
+    driver: bridge
